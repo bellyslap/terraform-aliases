@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo
-echo 'Preparing the following Terraform-related aliases:'
+echo 'The following Terraform-related aliases will be added to your profile:'
 echo
 echo '  tf=terraform'
 echo '  tfa=terraform apply'
@@ -13,16 +13,28 @@ echo '  tfp=terraform plan'
 echo '  tfsl=terraform state list'
 echo '  tfv=terraform version'
 echo
+echo 'Enter the path where these aliases should be added (e.g. `~/.bash_profile`, `~/.bash_aliases`, etc). Defaults to `~/.bash_profile`.'
 
-touch ~/.bash_profile
-echo "alias tf='terraform'" >> ~/.bash_profile
-echo "alias tfa='terraform apply'" >> ~/.bash_profile
-echo "alias tfaa='terraform apply -auto-approve'" >> ~/.bash_profile
-echo "alias tfd='terraform destroy'" >> ~/.bash_profile
-echo "alias tfdd='terraform destroy -auto-approve'" >> ~/.bash_profile
-echo "alias tfi='terraform init'" >> ~/.bash_profile
-echo "alias tfp='terraform plan'" >> ~/.bash_profile
-echo "alias tfsl='terraform state list'" >> ~/.bash_profile
-echo "alias tfv='terraform version'" >> ~/.bash_profile
-echo 'Run `source ~/.bash_profile` to apply the new aliases.'
+profile_path='~/.bash_profile'
+read profile_path_input
+
+if [ -z "$profile_path_input" ] # Check for NULL or empty string.
+then
+  profile_path=~/.bash_profile
+else
+  profile_path=~/${profile_path_input#'~/'} # Convert input to a file path.
+fi
+
+touch $profile_path # Create the file if it doesn't exist.
+echo "alias tf='terraform'" >> $profile_path
+echo "alias tfa='terraform apply'" >> $profile_path
+echo "alias tfaa='terraform apply -auto-approve'" >> $profile_path
+echo "alias tfd='terraform destroy'" >> $profile_path
+echo "alias tfdd='terraform destroy -auto-approve'" >> $profile_path
+echo "alias tfi='terraform init'" >> $profile_path
+echo "alias tfp='terraform plan'" >> $profile_path
+echo "alias tfsl='terraform state list'" >> $profile_path
+echo "alias tfv='terraform version'" >> $profile_path
+echo
+echo "You may need to run \`source $profile_path_input\` to apply the new aliases."
 echo
